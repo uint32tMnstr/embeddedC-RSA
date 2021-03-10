@@ -46,42 +46,6 @@ __exit:
     return ret;
 }
 
-static void crsa_moden(const CRSA_KEY_T *key, const uint16_t *src, uint16_t *dst)
-{
-    BN_DEFINE(exp, CRSA_CNT_U16)
-    BN_DEFINE(dst_copy, CRSA_BN_CNT)
-    BN_DEFINE(ans, CRSA_BN_CNT, 1)
-
-    BN_COPY(exp, BN_CNST_TYPE(key->exp))
-    memcpy(dst_copy->val, src, CRSA_CNT_U16 * sizeof(uint16_t));
-    BN_SET_CNT(dst_copy)
-    // BN_PRINT(exp)
-    // LOG("src "); BN_PRINT(dst_copy)
-    // BN_PRINT(ans)
-    
-    if(!BN_IS_NOT_EMPTY(dst_copy)){
-        memset(dst, 0, CRSA_CNT_U16*sizeof(uint16_t));
-        return;
-    }
-
-    //快速幂算法
-    // REF: https://www.cnblogs.com/Dfkuaid-210/p/12115238.html
-    bn_mod(dst_copy, key->modulus, dst_copy);
-    while(exp->cnt){
-        if(exp->val[0] & 1){
-            bn_mult(ans, dst_copy, ans);
-            bn_mod(ans, key->modulus, ans);
-        }
-        bn_mult(dst_copy, dst_copy, dst_copy);
-        // BN_PRINT(dst_copy)
-        bn_mod(dst_copy, key->modulus, dst_copy);
-        // BN_PRINT(dst_copy)
-        bn_devide_num(exp, 2, exp);
-        // BN_PRINT(exp)
-    }
-    // LOG("ret "); BN_PRINT(ans)
-    memcpy(dst, ans->val, CRSA_CNT_U16*sizeof(uint16_t));
-}
 #define CRSA_PADDING_SIZE(_size)    ((_size + CRSA_PADDING_U8 - 1) / CRSA_PADDING_U8 * CRSA_CNT_U8)
 #define CRSA_PLAIN_SIZE(_size)      (_size / CRSA_CNT_U8 * CRSA_PADDING_U8)
 int32_t crsa_encrypt_base(const CRSA_KEY_T *key, const char *src, int32_t src_size, char *dst, int32_t dst_size){
