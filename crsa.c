@@ -42,6 +42,7 @@ int32_t crsa_init(){
     UASSERT(BN_IS_NOT_EMPTY(BN_CNST_TYPE(gs_buf_E)), ret = CRSA_EC_KEY)
     UASSERT(BN_IS_NOT_EMPTY(BN_CNST_TYPE(gs_buf_D)), ret = CRSA_EC_KEY)
     UASSERT(BN_IS_NOT_EMPTY(BN_CNST_TYPE(gs_buf_N)), ret = CRSA_EC_KEY)
+    ret = bn_init();
 __exit:
     return ret;
 }
