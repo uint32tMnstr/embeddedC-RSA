@@ -1,3 +1,4 @@
+实现了大数运算（32位/64位），并基于大数运算实现了RSA算法。
 # CRSA
 1. implementation of bignum operations(also between bignum and num): a+b, a-b, a*b, a/b, a % b, ((a)^n)mod d.    
 2. implementation of rsa encryption and decryption in C language.
